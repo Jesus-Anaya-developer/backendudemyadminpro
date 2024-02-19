@@ -7,6 +7,7 @@ const getUsuarios = (req, res) => {
 
 // GET /usuarios/:id
 const getUsuarioId = (req, res) => {
+       const userId = req.params.id;
        // Logic to fetch user by ID
        res.json({
               msg: `Get user with ID ${userId}`
