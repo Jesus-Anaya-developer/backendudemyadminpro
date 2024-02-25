@@ -3,6 +3,8 @@
 
 const express = require('express');
 const router = express.Router();
+// *Importar el validationResult
+const { check } = require('express-validator');
 
 const { getUsuarios,
        getUsuarioId,
@@ -17,7 +19,11 @@ router.get('/', getUsuarios);
 router.get('/:id', getUsuarioId);
 
 // POST /usuarios
-router.post('/', postUsuario);
+router.post('/', [
+       check('nombre', 'El nombre es obligatorio').not().isEmpty(),
+       check('password', 'La contraseña es obligatoria').not().isEmpty(),
+       check('email', 'El correo es obligatorio').isEmail(),
+], postUsuario);
 
 // PUT /usuarios/:id
 router.put('/:id', putUsuario);

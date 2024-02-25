@@ -1,3 +1,9 @@
+// *Objetivo: Lógica de las rutas de usuarios
+const { response } = require('express');
+// *Importar el validationResult
+const { validationResult } = require('express-validator');
+
+// *Importar el modelo de usuario
 const Usuario = require('../models/usuario');
 
 // GET /usuarios
@@ -22,26 +28,65 @@ const getUsuarioId = (req, res) => {
 };
 
 // POST /usuarios
-const postUsuario = async (req, res) => {
+const postUsuario = async (req, res = response) => {
 
        console.log(req.body);
 
        // *Extraer el body
-       const { nombre, correo, password } = req.body;
+       const { nombre, password, email } = req.body;
+       // *Manejar errores
+       const errors = validationResult(req);
+       // *Si hay errores
+       if (!errors.isEmpty()) {
+              return res.status(400).json({
+                     ok: false,
+                     // *Mapear los errores
+                     errors: errors.mapped()
+              });
+       }
 
-       // *Crear una instancia de usuario
-       const usuario = new Usuario(req.body);
+       try {
+              // *Verificar si el correo existe
+              const existeEmail = await Usuario.findOne({ email });
+              // *Verificar si el usuario existe
+              const existeUsuario = await Usuario.findOne({ nombre });
 
-       // *Guardar el usuario en la base de datos
-       await usuario.save();
+              // *Si el correo o el usuario ya existen
+              if (existeEmail) {
+                     return res.status(400).json({
+                            ok: false,
+                            msg: 'El correo ya está registrado'
+                     });
+                     // *Si el usuario o el usuario ya existen
+              } else if (existeUsuario) {
+                     return res.status(400).json({
+                            ok: false,
+                            msg: 'El usuario ya está registrado'
+                     });
+              }
 
-       // Logic to create a new user
-       res.json({
-              ok: true,
-              msg: 'Create a new user',
-              // *El nombre de la propiedad es igual a la variable
-              usuario
-       });
+              // *Crear una instancia de usuario
+              const usuario = new Usuario(req.body);
+              console.log(req.body);
+
+              // *Guardar el usuario en la base de datos
+              await usuario.save();
+
+              // Logic to create a new user
+              res.json({
+                     ok: true,
+                     msg: 'Create a new user',
+                     // *El nombre de la propiedad es igual a la variable
+                     usuario
+              });
+
+       } catch (error) {
+              console.log(error);
+              res.status(500).json({
+                     ok: false,
+                     msg: 'Por favor hable con el administrador'
+              });
+       }
 };
 
 // PUT /usuarios/:id
