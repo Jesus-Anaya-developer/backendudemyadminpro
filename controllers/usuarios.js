@@ -1,3 +1,5 @@
+const Usuario = require('../models/usuario');
+
 // GET /usuarios
 const getUsuarios = (req, res) => {
        res.json({
@@ -15,10 +17,25 @@ const getUsuarioId = (req, res) => {
 };
 
 // POST /usuarios
-const postUsuario = (req, res) => {
+const postUsuario = async (req, res) => {
+
+       console.log(req.body);
+
+       // *Extraer el body
+       const { nombre, correo, password } = req.body;
+
+       // *Crear una instancia de usuario
+       const usuario = new Usuario(req.body);
+
+       // *Guardar el usuario en la base de datos
+       await usuario.save();
+
        // Logic to create a new user
        res.json({
-              msg: 'Create a new user'
+              ok: true,
+              msg: 'Create a new user',
+              // *El nombre de la propiedad es igual a la variable
+              usuario
        });
 };
 
