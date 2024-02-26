@@ -5,6 +5,8 @@ const express = require('express');
 const router = express.Router();
 // *Importar el validationResult
 const { check } = require('express-validator');
+// *Importar el middleware de validación
+const { validarCampos } = require('../middlewares/validar-campos');
 
 const { getUsuarios,
        getUsuarioId,
@@ -23,6 +25,7 @@ router.post('/', [
        check('nombre', 'El nombre es obligatorio').not().isEmpty(),
        check('password', 'La contraseña es obligatoria').not().isEmpty(),
        check('email', 'El correo es obligatorio').isEmail(),
+       validarCampos,
 ], postUsuario);
 
 // PUT /usuarios/:id

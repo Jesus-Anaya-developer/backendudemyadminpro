@@ -1,10 +1,11 @@
 // *Objetivo: Lógica de las rutas de usuarios
 const { response } = require('express');
-// *Importar el validationResult
-const { validationResult } = require('express-validator');
 
 // *Importar el modelo de usuario
 const Usuario = require('../models/usuario');
+
+// *Importar bcrypt para encriptar la contraseña
+const bcrypt = require('bcryptjs');
 
 // GET /usuarios
 const getUsuarios = async (req, res) => {
@@ -30,26 +31,12 @@ const getUsuarioId = (req, res) => {
 // POST /usuarios
 const postUsuario = async (req, res = response) => {
 
-       console.log(req.body);
+       const { email, password } = req.body;
 
-       // *Extraer el body
-       const { nombre, password, email } = req.body;
-       // *Manejar errores
-       const errors = validationResult(req);
-       // *Si hay errores
-       if (!errors.isEmpty()) {
-              return res.status(400).json({
-                     ok: false,
-                     // *Mapear los errores
-                     errors: errors.mapped()
-              });
-       }
-
+       // *Manejar los errores de la validación
        try {
               // *Verificar si el correo existe
               const existeEmail = await Usuario.findOne({ email });
-              // *Verificar si el usuario existe
-              const existeUsuario = await Usuario.findOne({ nombre });
 
               // *Si el correo o el usuario ya existen
               if (existeEmail) {
@@ -58,20 +45,19 @@ const postUsuario = async (req, res = response) => {
                             msg: 'El correo ya está registrado'
                      });
                      // *Si el usuario o el usuario ya existen
-              } else if (existeUsuario) {
-                     return res.status(400).json({
-                            ok: false,
-                            msg: 'El usuario ya está registrado'
-                     });
               }
 
               // *Crear una instancia de usuario
               const usuario = new Usuario(req.body);
-              console.log(req.body);
+
+              // *Encriptar la contraseña
+              const salt = bcrypt.genSaltSync(5);
+              // *Asignar la contraseña encriptada al usuario
+              usuario.password = bcrypt.hashSync(password, salt);
 
               // *Guardar el usuario en la base de datos
               await usuario.save();
-
+              console.log(req.body);
               // Logic to create a new user
               res.json({
                      ok: true,
