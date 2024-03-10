@@ -29,7 +29,11 @@ router.post('/', [
 ], postUsuario);
 
 // PUT /usuarios/:id
-router.put('/:id', putUsuario);
+router.put('/:id', [
+       check('nombre', 'El nombre es obligatorio').not().isEmpty(),
+       check('email', 'El correo es obligatorio').isEmail(),
+       check('role', 'El role es obligatorio').not().isEmpty(),
+], putUsuario);
 
 // DELETE /usuarios/:id
 router.delete('/:id', deleteUsuario)

@@ -34,7 +34,7 @@ const usuarioSchema = new mongoose.Schema({
 // *Método para ocultar __v y _id
 usuarioSchema.method('toJSON', function () {
        // *Extraer __v, _id y el resto de los argumentos
-       const { __v, _id, ...object } = this.toObject();
+       const { __v, _id, password, ...object } = this.toObject();
        // !Se puede oculatar tambien la contraseña
        // !const { __v, _id, contraseña ...object } = this.toObject();
 
