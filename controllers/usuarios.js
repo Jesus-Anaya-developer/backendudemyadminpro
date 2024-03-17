@@ -7,6 +7,9 @@ const Usuario = require('../models/usuario');
 // *Importar bcrypt para encriptar la contraseña
 const bcrypt = require('bcryptjs');
 
+// *Importar el helper para generar el token
+const { generateJWT } = require('../helpers/jwt');
+
 // GET /usuarios
 const getUsuarios = async (req, res) => {
 
@@ -15,7 +18,7 @@ const getUsuarios = async (req, res) => {
        res.json({
               ok: true,
               msg: 'Get all users',
-              usuarios
+              usuarios,
        });
 }
 
@@ -58,12 +61,17 @@ const postUsuario = async (req, res = response) => {
               // *Guardar el usuario en la base de datos
               await usuario.save();
               console.log(req.body);
+
+              // *Generar el token
+              const token = await generateJWT(usuario.id);
+
               // Logic to create a new user
               res.json({
                      ok: true,
                      msg: 'Create a new user',
                      // *El nombre de la propiedad es igual a la variable
-                     usuario
+                     usuario,
+                     token,
               });
 
        } catch (error) {
