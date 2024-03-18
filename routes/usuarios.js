@@ -44,6 +44,6 @@ router.put('/:id', [
 // DELETE /usuarios/:id
 router.delete('/:id',
        validarJWT,
-       deleteUsuario)
+       deleteUsuario);
 
 module.exports = router;

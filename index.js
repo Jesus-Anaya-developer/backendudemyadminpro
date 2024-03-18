@@ -25,6 +25,7 @@ dbConnect();
 // Define your routes here
 app.use('/api/usuarios', require('./routes/usuarios'));
 app.use('/api/login', require('./routes/auth'));
+app.use('/api/hospitales', require('./routes/hospitales'));
 
 app.listen(port, () => {
        console.log(`Server is running on port ${port}`);

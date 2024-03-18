@@ -8,7 +8,7 @@ const generateJWT = (uid) => {
               // * Crear el payload con el uid del usuario
               const payload = { uid };
               // * Generar el token con el payload y la clave secreta
-              jwt.sign({ payload }, process.env.JWT_SECRET_KEY, {
+              jwt.sign(payload, process.env.JWT_SECRET_KEY, {
                      // * Expira en 10 horas
                      expiresIn: '10h'
               }, (err, token) => {

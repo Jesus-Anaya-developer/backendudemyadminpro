@@ -60,7 +60,6 @@ const postUsuario = async (req, res = response) => {
 
               // *Guardar el usuario en la base de datos
               await usuario.save();
-              console.log(req.body);
 
               // *Generar el token
               const token = await generateJWT(usuario.id);
@@ -84,13 +83,13 @@ const postUsuario = async (req, res = response) => {
 };
 
 // PUT /usuarios/:id
-const putUsuario = async (req, res) => {
-       const userId = req.params.id;
+const putUsuario = async (req, res = response) => {
+       const uid = req.params.id;
 
        try {
 
               // *Verificar si el usuario existe
-              const usuarioDB = await Usuario.findById(userId);
+              const usuarioDB = await Usuario.findById(uid);
 
               // *Si el usuario no existe
               if (!usuarioDB) {
@@ -122,7 +121,7 @@ const putUsuario = async (req, res) => {
 
               // *Actualizar el usuario
               campos.email = email;
-              const usuarioActualizado = await Usuario.findByIdAndUpdate(userId, campos, { new: true });
+              const usuarioActualizado = await Usuario.findByIdAndUpdate(uid, campos, { new: true });
 
               // Logic to update user by ID
               res.json({
@@ -143,14 +142,14 @@ const putUsuario = async (req, res) => {
 };
 
 // DELETE /usuarios/:id
-const deleteUsuario = async (req, res) => {
-       const userId = req.params.id;
+const deleteUsuario = async (req, res = response) => {
+       const uid = req.params.id;
        // Logic to delete user by ID
 
        try {
 
               // *Verificar si el usuario existe
-              const usuarioDB = await Usuario.findById(userId);
+              const usuarioDB = await Usuario.findById(uid);
 
               // *Si el usuario no existe
               if (!usuarioDB) {
@@ -160,7 +159,7 @@ const deleteUsuario = async (req, res) => {
                      });
               }
               // *Eliminar el usuario
-              await Usuario.findByIdAndDelete(userId);
+              await Usuario.findByIdAndDelete(uid);
 
               res.json({
                      msg: `Delete user with ID ${userId}`

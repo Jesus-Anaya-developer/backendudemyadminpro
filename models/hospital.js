@@ -2,39 +2,25 @@
 const { Schema, model } = require('mongoose');
 
 // *Definir el esquema de la colección de usuarios
-const UsuarioSchema = Schema({
-
+const HospitalSchema = Schema({
        nombre: {
               type: String,
               required: true
        },
-       email: {
-              type: String,
-              required: true,
-              unique: true
-       },
-       password: {
-              type: String,
-              required: true,
-       },
        img: {
               type: String,
        },
-       role: {
-              type: String,
+       usuario: {
               required: true,
-              default: 'USER_ROLE'
-       },
-       google: {
-              type: Boolean,
-              default: false
-       },
-});
+              type: Schema.Types.ObjectId,
+              ref: 'Usuario'
+       }
+}, { collection: 'hospitales' });
 
 // *Método para ocultar __v y _id
-UsuarioSchema.method('toJSON', function () {
+HospitalSchema.method('toJSON', function () {
        // *Extraer __v, _id y el resto de los argumentos
-       const { __v, _id, password, ...object } = this.toObject();
+       const { __v, _id, ...object } = this.toObject();
        // !Se puede oculatar tambien la contraseña
        // !const { __v, _id, contraseña ...object } = this.toObject();
 
@@ -45,4 +31,4 @@ UsuarioSchema.method('toJSON', function () {
 });
 
 
-module.exports = model('Usuario', UsuarioSchema);
+module.exports = model('Usuario', HospitalSchema);

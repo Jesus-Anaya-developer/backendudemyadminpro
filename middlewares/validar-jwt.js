@@ -1,8 +1,10 @@
 const jwt = require('jsonwebtoken');
 
+
+
 const validarJWT = (req, res, next) => {
 
-       // Leer el token
+       // Leer el Token
        const token = req.header('x-token');
 
        if (!token) {
@@ -13,10 +15,10 @@ const validarJWT = (req, res, next) => {
        }
 
        try {
-              // *Extraer el uid del usuario que viene en el token y lo verifica
-              const { uid } = jwt.verify(token, process.env.JWT_SECRET_KEY);
 
+              const { uid } = jwt.verify(token, process.env.JWT_SECRET_KEY);
               req.uid = uid;
+              console.log(uid);
 
               next();
 
@@ -26,8 +28,10 @@ const validarJWT = (req, res, next) => {
                      msg: 'Token no válido'
               });
        }
-};
+
+}
+
 
 module.exports = {
        validarJWT
-};
+}
