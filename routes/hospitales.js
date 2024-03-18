@@ -23,7 +23,9 @@ router.get('/', getHospitales);
 // POST crear Hospital
 // *Validar los campos del usuario
 router.post('/', [
-
+       validarJWT,
+       check('nombre', 'El nombre del hospital es necesario').not().isEmpty(),
+       validarCampos,
 ], crearHospitales);
 
 // PUT actualizar Hospital
