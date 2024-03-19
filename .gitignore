@@ -37,3 +37,6 @@ yarn.lock
 
 # Ignore .env.production files for production environment variables
 .env.production
+
+# Ignore uploads directory
+/uploads/
