@@ -1,6 +1,8 @@
 const { response } = require("express");
 const { v4: uuidv4 } = require('uuid');
 const { actualizarImagen } = require("../helpers/actualizar-imagen");
+const path = require('path');
+const fs = require('fs');
 
 const cargarArchivo = async (req, res = response) => {
 
@@ -68,6 +70,30 @@ const cargarArchivo = async (req, res = response) => {
 
 };
 
+const retornaImagen = (req, res = response) => {
+
+       const tipo = req.params.tipo;
+       const foto = req.params.foto;
+
+       try {
+              const pathImg = path.join(__dirname, `../uploads/${tipo}/${foto}`);
+              console.log(pathImg);
+              if (fs.existsSync(pathImg)) {
+                     res.sendFile(pathImg);
+              } else {
+                     const defaultImgPath = path.join(__dirname, `../uploads/no-img.jpg`);
+                     res.sendFile(defaultImgPath);
+              }
+
+       } catch (error) {
+              res.json({
+                     ok: false,
+                     msg: 'No se pudo encontrar la imagen retornaImagen()'
+              });
+       }
+}
+
 module.exports = {
-       cargarArchivo
+       cargarArchivo,
+       retornaImagen
 }

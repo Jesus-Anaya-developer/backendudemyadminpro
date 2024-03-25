@@ -1,7 +1,7 @@
 /*
  ruta: /api/uploads
 */
-const { cargarArchivo } = require('../controllers/uploads');
+const { cargarArchivo, retornaImagen } = require('../controllers/uploads');
 const fileUpload = require('express-fileupload');
 
 const express = require('express');
@@ -15,5 +15,6 @@ router.use(fileUpload());
 
 router.put('/:tipo/:id', validarJWT, cargarArchivo);
 
+router.get('/:tipo/:foto', validarJWT, retornaImagen);
 
 module.exports = router;
