@@ -13,6 +13,9 @@ const port = process.env.PORT;
 // *Importar el modulo de cors
 const cors = require('cors');
 
+// *Carpeta publica
+app.use(express.static('public'));
+
 // *Lectura y parseo del body
 app.use(express.json());
 
