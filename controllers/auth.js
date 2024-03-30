@@ -92,7 +92,28 @@ const googleSignIn = async (req, res = response) => {
        }
 }
 
+// *Renovar token
+/*
+       Si el usuario tiene un token en la computadora
+       a la hora de hacer una petición, se le puede
+       asignar otro token.
+*/
+const renewToken = async (req, res = response) => {
+
+       const uid = req.uid;
+
+       // *Generar un nuevo JWT
+       const token = await generateJWT(uid);
+
+       res.json({
+              ok: true,
+              uid,
+              token
+       });
+}
+
 module.exports = {
        login,
-       googleSignIn
+       googleSignIn,
+       renewToken
 };

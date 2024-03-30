@@ -31,10 +31,13 @@ router.post('/', [
 // PUT actualizar Hospital
 // *Validar los campos del usuario
 router.put('/:id', [
+       validarJWT,
+       check('nombre', 'El nombre del hospital es necesario').not().isEmpty(),
 ], actualizarHospitales);
 
 // DELETE Eliminal Hospital
 router.delete('/:id',
+       validarJWT,
        borrarHospitales);
 
 module.exports = router;
