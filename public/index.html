@@ -4,8 +4,25 @@
 <body>
        <script src="https://accounts.google.com/gsi/client" async></script>
        <script>
+
+              var url = "http://localhost:3005/api/login/google";
+
               function handleCredentialResponse(response) {
-                     console.log("Encoded JWT ID token: " + response.credential);
+
+                     fetch(url, {
+                            method: "POST",
+                            headers: {
+                                   "Content-Type": "application/json",
+                            },
+                            body: JSON.stringify({ token: response.credential }),
+                     })
+                            .then((response) => response.json())
+                            .then((data) => {
+                                   console.log("Success:", data);
+                            })
+                            .catch((error) => {
+                                   console.error("Error:", error);
+                            });
               }
               window.onload = function () {
                      google.accounts.id.initialize({
